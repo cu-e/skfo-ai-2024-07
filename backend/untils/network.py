@@ -232,7 +232,7 @@ class LicensePlateRecognition:
         pred_texts = self.decode_batch(net_out_value)
         return pred_texts
 
-    def process(self, image_bytes: bytes) -> list[str]:
+    def process(self, image_bytes: bytes) -> tuple[list[str], np.ndarray]:
         """
         Основной процесс обработки изображения.
 
@@ -240,7 +240,7 @@ class LicensePlateRecognition:
             image_bytes (bytes): Изображение в виде байт.
 
         Returns:
-            list[str]: Список распознанных строк или None в случае ошибки.
+            tuple[list[str], np.ndarray]: Список распознанных строк и выровненное изображение.
         """
         image0, image, image_height, image_width = self.process_image(image_bytes)
 
@@ -276,11 +276,11 @@ class LicensePlateRecognition:
 
             interpreter_nomer = self.load_model(self.model_nomer_path)
             pred_texts = self.extract_text(final_image, interpreter_nomer)
-            return pred_texts
+            return pred_texts, final_image
         else:
             raise ValueError('Номерной знак не обнаружен.')
 
-    def process_zip(self, zip_bytes: bytes) -> dict[str, list[str]]:
+    def process_zip(self, zip_bytes: bytes) -> dict[str, tuple[list[str], np.ndarray]]:
         """
         Обработка изображений из zip-архива.
 
@@ -288,7 +288,7 @@ class LicensePlateRecognition:
             zip_bytes (bytes): Zip-архив в виде байт.
 
         Returns:
-            dict[str, list[str]]: Словарь с именами файлов и распознанными текстами.
+            dict[str, tuple[list[str], np.ndarray]]: Словарь с именами файлов, распознанными текстами и выровненными изображениями.
         """
         results = {}
         with zipfile.ZipFile(BytesIO(zip_bytes), 'r') as zip_ref:
@@ -296,8 +296,8 @@ class LicensePlateRecognition:
                 with zip_ref.open(file_name) as file:
                     image_bytes = file.read()
                     try:
-                        text = self.process(image_bytes)
-                        results[file_name] = text
+                        text, aligned_image = self.process(image_bytes)
+                        results[file_name] = (text, aligned_image)
                     except ValueError as e:
-                        results[file_name] = [str(e)]
+                        results[file_name] = ([str(e)], None)
         return results
