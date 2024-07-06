@@ -1,14 +1,16 @@
 from fastapi import APIRouter, UploadFile
-from backend.config import PATH_TO_ZIP_FILES
-import aiofiles
+from backend.app.dependencies import LicensePlateRecognitionDep
 
 
 router = APIRouter()
 
+
 @router.post('/upload-zip-file')
-async def upload_zip_file(zip_file: UploadFile):
-    out_path = PATH_TO_ZIP_FILES / zip_file.filename
-    async with aiofiles.open(out_path, 'wb') as out_file:
-        while content := await zip_file.read(1024):
-            await out_file.write(content)
-    return {'message': 'ok'}
+async def upload_zip_file(
+    zip_file: UploadFile,
+    license_plate_recognition: LicensePlateRecognitionDep
+) -> dict:
+    """функция-обработчик архива с картинками"""
+    content = await zip_file.read()
+    recongition_result_bytes = license_plate_recognition.process_zip(content)
+    return recongition_result_bytes

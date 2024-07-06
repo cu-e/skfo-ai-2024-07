@@ -8,6 +8,7 @@ from skimage.feature import canny
 from skimage.transform import hough_line, hough_line_peaks, rotate
 from io import BytesIO
 import zipfile
+import base64
 
 
 class ImageProcessor:
@@ -302,7 +303,10 @@ class LicensePlateRecognition:
                     image_bytes = file.read()
                     try:
                         text, aligned_image_bytes = self.process(image_bytes)
-                        results[file_name] = (text, aligned_image_bytes)
+                        aligned_image_base64 = base64.b64encode(
+                            aligned_image_bytes
+                        )
+                        results[file_name] = (text, aligned_image_base64)
                     except ValueError as e:
                         results[file_name] = ([str(e)], None)
         return results
