@@ -232,7 +232,7 @@ class LicensePlateRecognition:
         pred_texts = self.decode_batch(net_out_value)
         return pred_texts
 
-    def process(self, image_bytes: bytes) -> tuple[list[str], np.ndarray]:
+    def process(self, image_bytes: bytes) -> tuple[list[str], bytes]:
         """
         Основной процесс обработки изображения.
 
@@ -240,7 +240,7 @@ class LicensePlateRecognition:
             image_bytes (bytes): Изображение в виде байт.
 
         Returns:
-            tuple[list[str], np.ndarray]: Список распознанных строк и выровненное изображение.
+            tuple[list[str], bytes]: Список распознанных строк и выровненное изображение в байтах.
         """
         image0, image, image_height, image_width = self.process_image(image_bytes)
 
@@ -273,14 +273,19 @@ class LicensePlateRecognition:
                 rotated_image = rotated_image[minus:-minus, :, :]
 
             final_image = self.enhance_image(rotated_image)
+            final_pil_image = Image.fromarray(cv2.cvtColor(final_image, cv2.COLOR_BGR2RGB))
+
+            with BytesIO() as output:
+                final_pil_image.save(output, format="JPEG")
+                final_image_bytes = output.getvalue()
 
             interpreter_nomer = self.load_model(self.model_nomer_path)
             pred_texts = self.extract_text(final_image, interpreter_nomer)
-            return pred_texts, final_image
+            return pred_texts, final_image_bytes
         else:
             raise ValueError('Номерной знак не обнаружен.')
 
-    def process_zip(self, zip_bytes: bytes) -> dict[str, tuple[list[str], np.ndarray]]:
+    def process_zip(self, zip_bytes: bytes) -> dict[str, tuple[list[str], bytes]]:
         """
         Обработка изображений из zip-архива.
 
@@ -288,16 +293,16 @@ class LicensePlateRecognition:
             zip_bytes (bytes): Zip-архив в виде байт.
 
         Returns:
-            dict[str, tuple[list[str], np.ndarray]]: Словарь с именами файлов, распознанными текстами и выровненными изображениями.
+            dict[str, tuple[list[str], bytes]]: Словарь с именами файлов, распознанными текстами и выровненными изображениями в байтах.
         """
         results = {}
         with zipfile.ZipFile(BytesIO(zip_bytes), 'r') as zip_ref:
-            for file_name in zip_ref.namelist():
+            for file_name in zip_ref.namelist()[0:3]:
                 with zip_ref.open(file_name) as file:
                     image_bytes = file.read()
                     try:
-                        text, aligned_image = self.process(image_bytes)
-                        results[file_name] = (text, aligned_image)
+                        text, aligned_image_bytes = self.process(image_bytes)
+                        results[file_name] = (text, aligned_image_bytes)
                     except ValueError as e:
                         results[file_name] = ([str(e)], None)
         return results
