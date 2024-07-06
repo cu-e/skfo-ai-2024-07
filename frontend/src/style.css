@@ -1,0 +1,117 @@
+:root {
+    --font-family: "Inter", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+.content{
+    margin-right: 80px;
+    margin-left: 80px;
+    margin-top: 40px;
+}
+h1{
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 20px;
+    color: #000;
+    cursor: default;
+}
+.main-block{
+    display: flex;
+    flex-direction: column;
+}
+.top_main-block{
+    border-top: 1px solid #d4d4d4;
+    border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+    border-radius: 12px 12px 0 0;
+
+    height: 40px;
+}
+.guthub-button{
+    border-radius: 12px;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+
+    background: #000;
+    border: none;
+    cursor: pointer;
+}
+.cental_main-block{
+    border: 1px solid #d4d4d4;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height:35vh;
+
+}
+.bottom_main-block-history {
+    border-bottom: 1px solid #d4d4d4;
+    border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+    border-radius: 0 0 12px 12px;
+    padding: 0px 20px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+}
+.bottom_main-block-history:hover{
+    transition: 500ms;
+    background: #eeeeee;
+
+}
+.line-block{
+    display: flex;
+    gap: 15px;
+}
+.card-block{
+    border: 1px solid #d4d4d4;
+    border-radius: 12px;
+    padding: 20px;
+    width: 500px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 5px;
+
+
+
+    .input-file-text{
+        font-family: var(--font-family);
+        font-weight: 700;
+        font-size: 14px;
+        color: #545454;
+    }
+    .discripttext{
+        font-family: var(--font-family);
+        font-weight: 400;
+        font-size: 14px;
+        text-align: center;
+        color: #545454;
+    }
+}
+.card-block:hover{
+    transition: 300ms;
+    background: #eeeeee;
+}
+input{
+    display: none;
+}
+
+@media screen and (max-width: 700px) {
+    .content{
+        margin-right: 15px;
+        margin-left: 15px;
+        margin-top: 40px;
+
+    }
+    .card-block {
+        width: calc(90vw - 30px);
+    }
+}

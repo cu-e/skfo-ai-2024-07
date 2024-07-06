@@ -1,0 +1,10 @@
+{
+  "name": "AI Hack 2024-07",
+  "short_name": "Ai Hack",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "minimal-ui",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/"
+}
