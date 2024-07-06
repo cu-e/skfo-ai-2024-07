@@ -16,6 +16,9 @@ export class FileInputBlock {
         this.description = description;
         this.buttonText = buttonText;
     }
+    public getId(){
+        return this.id
+    }
 
     render(): string {
         return `
@@ -40,6 +43,9 @@ export class FileInputBlock {
         inputElement?.addEventListener('change', (event) => {
 
             const nameElement:string = inputElement.files[0].name
+
+            // console.log(nameElement)
+
             let sizeElement =  Number(inputElement.files[0].size / 1000 ** 2).toFixed(1)
             const descriptionElement = document.querySelector(`#${this.id}-description`);
             const inputElementText = document.querySelector(".input-file-text")

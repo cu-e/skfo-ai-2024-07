@@ -1,22 +1,21 @@
 import {acceptButton} from "./AcceptButton.ts";
 import {FileInputBlock} from "./AddBlock.ts";
 
-const fileInputBlock2:FileInputBlock = new FileInputBlock({ id: "file-input-2", description: "до 100мб", buttonText: "Загрузить ZIP файл Фотографий" });
+export const fileInputBlock1:FileInputBlock = new FileInputBlock({ id: "file-input-1", description: "до 100мб", buttonText: "Загрузить ZIP файл Фотографий" });
 
 export class Form{
 
 
-
-    static return(){
+     return(){
         return `
-                    <form id="add-form">
-            ${fileInputBlock2.render()}
+            <form id="add-form">
+            ${fileInputBlock1.render()}
             ${acceptButton}
             </form>
         `
     }
 
-    static addEventListeners():void{
+    addEventListeners():void{
         const form: HTMLFormElement = document.getElementById('add-form') as HTMLFormElement;
 
 
@@ -25,12 +24,36 @@ export class Form{
         sumbitButton.addEventListener("click", (event) =>{
 
             event.preventDefault()
-            const formData = new FormData(form)
-            if (formData.get('file').size != 0){
-            const res =  fetch("",{
-                method: 'POST',
-                body: formData,
-            })}
+
+            const inputElement = document.querySelector(`#${fileInputBlock1.getId()}`) as HTMLInputElement;
+            const file = inputElement.files[0]
+            const formData = new FormData()
+            formData.append("zip_file", file )
+            if (formData.get('zip_file').size != 0) {
+                const res = fetch("http://localhost/api/upload-zip-file", {
+                    method: 'POST',
+                    body: formData,
+                }).then(res => {
+                    return res.text().then(text => {
+                        return {
+                            status: res.status,
+                            ok: res.ok,
+                            text: text
+                        };
+                    });
+                })
+                    .then(res => {
+                        if (res.ok) {
+                            const data = JSON.parse(res.text);
+                            console.log(data);
+                        } else {
+                            console.error('Ошибка при загрузке файла:', res.status, res.text);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Произошла ошибка:', error);
+                    })
+            }
             else {
                 const cardBlock = document.querySelector('.card-block')
                 cardBlock.style.border = "1px solid #ff0404"

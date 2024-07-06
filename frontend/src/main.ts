@@ -3,8 +3,9 @@ import {FileInputBlock} from "./AddBlock.ts";
 import '/icon.svg'
 
 import {historyButton} from "./history-button.ts";
-import {Form} from "./Form.ts";
-const fileInputBlock2:FileInputBlock = new FileInputBlock({ id: "file-input-2", description: "до 100мб", buttonText: "Загрузить ZIP файл Фотографий" });
+import {fileInputBlock1, Form} from "./Form.ts";
+
+const form = new Form()
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="content">
@@ -18,14 +19,12 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
             <div class="top_main-block">
             </div>
             <div class="cental_main-block">
-            ${Form.return()}
+            ${form.return()}
             </div>
 ${historyButton}
        </div>
   </div>
 `
+fileInputBlock1.addEventListeners()
+form.addEventListeners()
 
-fileInputBlock2.addEventListeners();
-Form.addEventListeners()
-
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
