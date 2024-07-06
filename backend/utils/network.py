@@ -298,7 +298,7 @@ class LicensePlateRecognition:
         """
         results = {}
         with zipfile.ZipFile(BytesIO(zip_bytes), 'r') as zip_ref:
-            for file_name in zip_ref.namelist()[0:3]:
+            for file_name in zip_ref.namelist():
                 with zip_ref.open(file_name) as file:
                     image_bytes = file.read()
                     try:
