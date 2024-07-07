@@ -36,7 +36,7 @@ h1{
     border: none;
     cursor: pointer;
 }
-.cental_main-block{
+.central_main-block{
     border: 1px solid #d4d4d4;
     padding: 10px 20px;
     display: flex;
@@ -104,14 +104,43 @@ input{
     display: none;
 }
 
+.image-block{
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 18px;
+    border: 1px solid #d4d4d4;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 5px;
+    padding: 5px;
+
+    img{
+        width: 100%;
+    }
+}
+h2{
+    font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 20px;
+}
 @media screen and (max-width: 700px) {
-    .content{
+    .content {
         margin-right: 15px;
         margin-left: 15px;
         margin-top: 40px;
 
     }
+
     .card-block {
         width: calc(90vw - 30px);
+    }
+
+    .image-block {
+        width: calc(90vw - 35px);
+
     }
 }

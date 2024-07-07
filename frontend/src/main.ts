@@ -1,5 +1,4 @@
 import './style.css'
-import {FileInputBlock} from "./AddBlock.ts";
 import '/icon.svg'
 
 import {historyButton} from "./history-button.ts";
@@ -18,7 +17,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
        <div class="main-block">
             <div class="top_main-block">
             </div>
-            <div class="cental_main-block">
+            <div class="central_main-block">
             ${form.return()}
             </div>
 ${historyButton}
